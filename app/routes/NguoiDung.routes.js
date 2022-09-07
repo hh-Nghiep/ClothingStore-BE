@@ -20,6 +20,12 @@ module.exports = (app) => {
         })
     })
 
+    app.post('/user/updateinfo', (request, response) => {
+        Controller.userUpdateInfo(request).then(result => {
+            response.json(result);
+        })
+    })
+
     app.post('/user/updatePassword', (request, response) => {
         Controller.updatePassword(request).then(result => {
             response.json(result);
@@ -58,6 +64,12 @@ module.exports = (app) => {
 
     app.post('/user/checkId', (request, response) => {
         Controller.checkId(request).then(result => {
+            response.json(result);
+        })
+    })
+
+    app.get('/user/find/:id', (request, response) => {
+        Controller.findUserWitdEmail(request.params.id).then(result => {
             response.json(result);
         })
     })

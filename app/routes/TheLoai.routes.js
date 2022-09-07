@@ -2,8 +2,8 @@ var Controller = require('../controllers/TheLoai.controller');
 var Model = require('./../models/TheLoai.model');
 
 module.exports = (app) => {
-    app.get('/cates', (request, response) => {
-        Controller.GetAllCateGory().then(result => {
+    app.get('/cate/:id', (request, response) => {
+        Controller.GetAllCategoryWithStatus(request.params.id).then(result => {
             response.json(result);
         })
     })
@@ -14,8 +14,8 @@ module.exports = (app) => {
         })
     })
 
-    app.delete('/cate/delete', (request, response) => {
-        Controller.DeleteCategory(request).then(result => {
+    app.delete('/cate/status', (request, response) => {
+        Controller.UpdateStatusCategory(request).then(result => {
             response.json(result);
         })
     })

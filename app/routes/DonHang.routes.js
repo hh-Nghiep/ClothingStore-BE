@@ -15,8 +15,14 @@ module.exports = (app) => {
     })
 
     app.get('/order/status/:id', (request, response) => {
+        var amount = 10;
+        var page = parseInt(request.query.page);
         Controller.getAllOrderWithStatus(request.params.id).then(result => {
-            response.json(result);
+            var data = {
+                data: result[0].slice(((page - 1) * amount), (page * amount)),
+                totalPage: Math.round(result[0].length / amount)
+            }
+            response.json(data);
         })
     })
 
@@ -27,8 +33,14 @@ module.exports = (app) => {
     })
 
     app.post('/order/id', (request, response) => {
+        var amount = 8;
+        var page = parseInt(request.query.page);
         Controller.getAllOrderWithId(request).then(result => {
-            response.json(result);
+            var data = {
+                data: result[0].slice(((page - 1) * amount), (page * amount)),
+                totalPage: Math.round(result[0].length / amount)
+            }
+            response.json(data);
         })
     })
 
@@ -50,8 +62,15 @@ module.exports = (app) => {
         })
     })
 
-    app.get('/order/detail/:id', (request, response) => {
-        Controller.getDetailOrder(request.params.id).then(result => {
+
+    app.post('/order/return', (request, response) => {
+        Controller.addDetailReturnBill(request).then(result => {
+            response.json(result);
+        })
+    })
+
+    app.get('/order/find/:id', (request, response) => {
+        Controller.findOrderWitdId(request.params.id).then(result => {
             response.json(result);
         })
     })

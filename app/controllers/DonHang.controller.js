@@ -22,10 +22,10 @@ async function addDetailOrder(values) {
     try {
         let pool = await sql.connect(config);
         let insertDetailOrder = await pool.request()
-            .input('maDH', sql.VarChar, values.body.maDH)
-            .input('maCTSP', sql.NVarChar, values.body.maCTSP)
-            .input('soLuong', sql.VarChar, values.body.soLuong)
-            .input('gia', sql.VarChar, values.body.gia)
+            .input('maDH', sql.Int, values.body.maDH)
+            .input('maCTSP', sql.Int, values.body.maCTSP)
+            .input('soLuong', sql.Int, values.body.soLuong)
+            .input('gia', sql.Int, values.body.gia)
             .execute('sp_TaoChiTietDonHang');
         return insertDetailOrder.recordsets;
     }
@@ -86,6 +86,7 @@ async function updateStatusOrder(values) {
         console.log(err);
     }
 }
+
 async function confirmOrder(values) {
     try {
         let pool = await sql.connect(config);
@@ -113,6 +114,34 @@ async function getDetailOrder(id) {
     }
 }
 
+async function addDetailReturnBill(values) {
+    try {
+        let pool = await sql.connect(config);
+        let detailReturn = await pool.request()
+            .input('maPhieuTra', sql.Int, values.body.maPhieuTra)
+            .input('maCTSP', sql.Int, values.body.maCTSP)
+            .input('soLuong', sql.Int, values.body.soLuong)
+            .execute('sp_TaoChiTietPhieuTra');
+        return detailReturn.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+async function findOrderWitdId(values) {
+    try {
+        var sqlqr = `SELECT TOP 10 * FROM DonHang Where maDH Like '%${values}%'`
+        let pool = await sql.connect(config);
+        let detailReturn = await pool.request()
+            .query(sqlqr);
+        return detailReturn.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     getAllOrder: getAllOrder,
     addOrder: addOrder,
@@ -122,4 +151,6 @@ module.exports = {
     getAllOrderWithStatus: getAllOrderWithStatus,
     confirmOrder: confirmOrder,
     getDetailOrder: getDetailOrder,
+    addDetailReturnBill: addDetailReturnBill,
+    findOrderWitdId: findOrderWitdId,
 }

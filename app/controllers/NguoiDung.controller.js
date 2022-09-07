@@ -19,7 +19,7 @@ async function getUserById(values) {
     try {
         let pool = await sql.connect(config);
         let users = await pool.request()
-            .input('maNguoiDung', sql.VarChar, values.body.maNguoiDung)
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
             .query("select * from NguoiDung where maNguoiDung=@maNguoiDung");
         return users.recordsets;
     }
@@ -32,7 +32,7 @@ async function updateUser(values) {
     try {
         let pool = await sql.connect(config);
         let users = await pool.request()
-            .input('maNguoiDung', sql.VarChar, values.body.maNguoiDung)
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
             .input('hoTen', sql.NVarChar, values.body.hoTen.trim())
             .input('sdt', sql.VarChar, values.body.sdt)
             .input('email', sql.VarChar, values.body.email)
@@ -41,6 +41,24 @@ async function updateUser(values) {
             .input('maQuyen', sql.Int, values.body.maQuyen)
             .input('trangThai', sql.Int, values.body.trangThai)
             .execute("sp_ChinhSuaNguoiDung");
+        return users.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function userUpdateInfo(values) {
+    try {
+        let pool = await sql.connect(config);
+        let users = await pool.request()
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
+            .input('hoTen', sql.NVarChar, values.body.hoTen.trim())
+            .input('sdt', sql.VarChar, values.body.sdt)
+            .input('email', sql.VarChar, values.body.email)
+            .input('diaChi', sql.NVarChar, values.body.diaChi)
+            .input('cmnd', sql.VarChar, values.body.cmnd)
+            .execute("sp_NguoiDungCapNhatThongTin");
         return users.recordsets;
     }
     catch (error) {
@@ -86,7 +104,7 @@ async function disableUser(values) {
         let pool = await sql.connect(config);
         let users = await pool.request()
             .input('trangThai', sql.Int, 0)
-            .input('maNguoiDung', sql.VarChar, values.body.maNguoiDung)
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
             .query("UPDATE NguoiDung set trangThai=@trangThai where maNguoiDung=@maNguoiDung");
         return users.recordsets;
     }
@@ -118,6 +136,7 @@ async function checkPhone(values) {
     try {
         let pool = await sql.connect(config);
         let userPhone = await pool.request()
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
             .input('sdt', sql.VarChar, values.body.sdt)
             .execute("sp_KiemTraSoDienThoai");
         if (userPhone.returnValue === 1) {
@@ -135,6 +154,7 @@ async function checkEmail(values) {
     try {
         let pool = await sql.connect(config);
         let userEmail = await pool.request()
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
             .input('email', sql.VarChar, values.body.email)
             .execute("sp_KiemTraEmail");
         if (userEmail.returnValue === 1) {
@@ -152,6 +172,7 @@ async function checkId(values) {
     try {
         let pool = await sql.connect(config);
         let userId = await pool.request()
+            .input('maNguoiDung', sql.Int, values.body.maNguoiDung)
             .input('cmnd', sql.VarChar, values.body.cmnd)
             .execute("sp_KiemTraCMND");
         if (userId.returnValue === 1) {
@@ -165,6 +186,19 @@ async function checkId(values) {
     }
 }
 
+async function findUserWitdEmail(values) {
+    try {
+        var sqlqr = `SELECT TOP 10 * FROM NguoiDung Where email Like '%${values}%'`
+        let pool = await sql.connect(config);
+        let detailReturn = await pool.request()
+            .query(sqlqr);
+        return detailReturn.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     getUserByRole: getUserByRole,
     getUserById: getUserById,
@@ -175,5 +209,7 @@ module.exports = {
     checkPhone: checkPhone,
     checkEmail: checkEmail,
     checkId: checkId,
-    updatePassword: updatePassword
+    updatePassword: updatePassword,
+    userUpdateInfo: userUpdateInfo,
+    findUserWitdEmail: findUserWitdEmail
 }

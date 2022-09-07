@@ -6,6 +6,8 @@ async function getAllProduct(values) {
         let pool = await sql.connect(config);
         let products = await pool.request()
             .input('trangThai', sql.Int, values.body.trangThai)
+            .input('maTL', sql.Int, values.body.maTL)
+            .input('gia', sql.Int, values.body.gia)
             .execute("sp_LayToanBoSanPham");
         return products.recordsets;
     }
@@ -69,7 +71,6 @@ async function getProductWithId(id) {
 }
 
 async function editProduct(values) {
-    console.log(values.body)
     try {
         let pool = await sql.connect(config);
         let deleteProduct = await pool.request()
@@ -124,6 +125,20 @@ async function getAmountProductWithId(id) {
     }
 }
 
+async function findProductWithName(values) {
+    try {
+        let pool = await sql.connect(config);
+        let product = await pool.request()
+            .input('tenSP', sql.NVarChar, values.body.tenSP)
+            .input('trangThai', sql.Int, values.body.trangThai)
+            .execute('sp_TimKiemSanPham');
+        return product.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     getAllProduct: getAllProduct,
     addProduct: addProduct,
@@ -132,5 +147,6 @@ module.exports = {
     editProduct: editProduct,
     activateProduct: activateProduct,
     getAmountProductWithId: getAmountProductWithId,
+    findProductWithName: findProductWithName,
 
 }

@@ -28,6 +28,7 @@ require('./app/routes/Quyen.routes')(app);
 require('./app/routes/SanPham.routes')(app);
 require('./app/routes/Size.routes')(app);
 require('./app/routes/TheLoai.routes')(app);
+require('./app/routes/KhuyenMai.routes')(app);
 
 var port = process.env.PORT || 3000;
 app.listen(port, () => console.log('API is runnning at ' + port));

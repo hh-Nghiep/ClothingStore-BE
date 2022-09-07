@@ -2,10 +2,11 @@ var config = require('../config/db.config')
 const sql = require('mssql')
 
 
-async function GetAllCateGory(tenQuyen) {
+async function GetAllCategoryWithStatus(trangThai) {
     try {
         let pool = await sql.connect(config);
         let insertProduct = await pool.request()
+            .input('trangThai', sql.Int, trangThai)
             .execute('sp_LayToanBoTheLoai');
         return insertProduct.recordsets;
     }
@@ -32,8 +33,8 @@ async function AddCategory(values) {
     try {
         let pool = await sql.connect(config);
         let insertProduct = await pool.request()
-            .input('tenTL', sql.NVarChar, values.body.tenTheLoai)
-            .query('insert into TheLoai (tenTL) values (@tenTL)');
+            .input('tenTL', sql.NVarChar, values.body.tenTL)
+            .query('insert into TheLoai (tenTL, trangThai) values (@tenTL, 1)');
         return insertProduct.recordsets;
     }
     catch (err) {
@@ -41,12 +42,13 @@ async function AddCategory(values) {
     }
 }
 
-async function DeleteCategory(values) {
+async function UpdateStatusCategory(values) {
     try {
         let pool = await sql.connect(config);
         let insertProduct = await pool.request()
+            .input('trangThai', sql.Int, values.body.trangThai)
             .input('maTL', sql.Int, values.body.maTL)
-            .query('DELETE FROM TheLoai WHERE maTL = @maTL');
+            .query('UPDATE TheLoai set trangThai=@trangThai WHERE maTL = @maTL');
         return insertProduct.recordsets;
     }
     catch (err) {
@@ -55,9 +57,10 @@ async function DeleteCategory(values) {
 }
 
 
+
 module.exports = {
-    GetAllCateGory: GetAllCateGory,
+    GetAllCategoryWithStatus: GetAllCategoryWithStatus,
     AddCategory: AddCategory,
     UpdateCateGory: UpdateCateGory,
-    DeleteCategory: DeleteCategory,
+    UpdateStatusCategory: UpdateStatusCategory,
 }

@@ -4,8 +4,14 @@ var Model = require('./../models/SanPham.model');
 module.exports = (app) => {
 
     app.post('/products', (request, response) => {
+        var amountProduct = 12;
+        var pageProduct = parseInt(request.query.page);
         Controller.getAllProduct(request).then(result => {
-            response.json(result);
+            var data = {
+                data: result[0].slice(((pageProduct - 1) * amountProduct), (pageProduct * amountProduct)),
+                totalPage: Math.round(result[0].length / 12)
+            }
+            response.json(data);
         })
     })
 
@@ -41,6 +47,12 @@ module.exports = (app) => {
 
     app.post('/product/activate', (request, response) => {
         Controller.activateProduct(request).then(result => {
+            response.json(result[0]);
+        })
+    })
+
+    app.post('/product/find', (request, response) => {
+        Controller.findProductWithName(request).then(result => {
             response.json(result[0]);
         })
     })
