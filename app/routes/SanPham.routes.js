@@ -9,7 +9,7 @@ module.exports = (app) => {
         Controller.getAllProduct(request).then(result => {
             var data = {
                 data: result[0].slice(((pageProduct - 1) * amountProduct), (pageProduct * amountProduct)),
-                totalPage: Math.round(result[0].length / 12)
+                totalPage: Math.ceil(result[0].length / 12)
             }
             response.json(data);
         })

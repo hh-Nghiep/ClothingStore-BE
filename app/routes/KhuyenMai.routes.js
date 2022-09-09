@@ -11,14 +11,13 @@ module.exports = (app) => {
     app.post('/sales', (request, response) => {
         var amount = 10;
         var page = parseInt(request.query.page);
-        console.log(request)
         Controller.getAllSale(request).then(result => {
             if (page === 0) {
                 response.json(result);
             } else {
                 var data = {
                     data: result[0].slice(((page - 1) * amount), (page * amount)),
-                    totalPage: Math.round(result[0].length / 12)
+                    totalPage: Math.ceil(result[0].length / 12)
                 }
                 response.json(data);
             }

@@ -20,7 +20,7 @@ module.exports = (app) => {
         Controller.getAllOrderWithStatus(request.params.id).then(result => {
             var data = {
                 data: result[0].slice(((page - 1) * amount), (page * amount)),
-                totalPage: Math.round(result[0].length / amount)
+                totalPage: Math.ceil(result[0].length / amount)
             }
             response.json(data);
         })
@@ -38,7 +38,7 @@ module.exports = (app) => {
         Controller.getAllOrderWithId(request).then(result => {
             var data = {
                 data: result[0].slice(((page - 1) * amount), (page * amount)),
-                totalPage: Math.round(result[0].length / amount)
+                totalPage: Math.ceil(result[0].length / amount)
             }
             response.json(data);
         })

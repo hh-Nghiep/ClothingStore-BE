@@ -12,6 +12,7 @@ async function AddSale(values) {
             .input('maSP', sql.Int, values.body.maSP)
             .input('maSize', sql.Int, values.body.maSize)
             .input('phanTramGiam', sql.Int, values.body.phanTramGiam)
+            .input('index', sql.Int, values.body.index)
             .execute("sp_TaoKhuyenMai");
         return sale;
     }

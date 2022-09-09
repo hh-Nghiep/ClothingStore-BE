@@ -3,8 +3,14 @@ var Model = require('./../models/NguoiDung.model');
 
 module.exports = (app) => {
     app.post('/users', (request, response) => {
+        var amount = 12;
+        var page = parseInt(request.query.page);
         Controller.getUserByRole(request).then(result => {
-            response.json(result);
+            var data = {
+                data: result[0].slice(((page - 1) * amount), (page * amount)),
+                totalPage: Math.ceil(result[0].length / 12)
+            }
+            response.json(data);
         })
     })
 
@@ -70,6 +76,12 @@ module.exports = (app) => {
 
     app.get('/user/find/:id', (request, response) => {
         Controller.findUserWitdEmail(request.params.id).then(result => {
+            response.json(result);
+        })
+    })
+
+    app.post('/user/checkInfo', (request, response) => {
+        Controller.checkInfoUser(request).then(result => {
             response.json(result);
         })
     })

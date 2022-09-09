@@ -199,6 +199,21 @@ async function findUserWitdEmail(values) {
     }
 }
 
+async function checkInfoUser(values) {
+    try {
+        let pool = await sql.connect(config);
+        let detailReturn = await pool.request()
+            .input('email', sql.VarChar, values.body.email)
+            .input('sdt', sql.VarChar, values.body.sdt)
+            .input('cmnd', sql.VarChar, values.body.cmnd)
+            .execute("sp_KiemTraThongTinNguoiDung");
+        return detailReturn.returnValue;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     getUserByRole: getUserByRole,
     getUserById: getUserById,
@@ -211,5 +226,6 @@ module.exports = {
     checkId: checkId,
     updatePassword: updatePassword,
     userUpdateInfo: userUpdateInfo,
-    findUserWitdEmail: findUserWitdEmail
+    findUserWitdEmail: findUserWitdEmail,
+    checkInfoUser: checkInfoUser
 }

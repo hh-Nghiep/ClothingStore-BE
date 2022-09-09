@@ -18,11 +18,11 @@ async function GetAllCategoryWithStatus(trangThai) {
 async function UpdateCateGory(values) {
     try {
         let pool = await sql.connect(config);
-        let insertProduct = await pool.request()
+        let cate = await pool.request()
             .input('maTL', sql.Int, values.body.maTL)
             .input('tenTL', sql.NVarChar, values.body.tenTL)
-            .query('UPDATE TheLoai set tenTL=@tenTL WHERE maTL=@maTL');
-        return insertProduct.recordsets;
+            .execute('sp_ChinhSuaTheLoai ');
+        return cate.returnValue;
     }
     catch (err) {
         console.log(err);
@@ -32,10 +32,10 @@ async function UpdateCateGory(values) {
 async function AddCategory(values) {
     try {
         let pool = await sql.connect(config);
-        let insertProduct = await pool.request()
+        let cate = await pool.request()
             .input('tenTL', sql.NVarChar, values.body.tenTL)
-            .query('insert into TheLoai (tenTL, trangThai) values (@tenTL, 1)');
-        return insertProduct.recordsets;
+            .execute('sp_ThemTheLoai ');
+        return cate.returnValue;
     }
     catch (err) {
         console.log(err);
