@@ -142,6 +142,23 @@ async function findOrderWitdId(values) {
     }
 }
 
+async function getAllOrderWithDay(values) {
+    try {
+        let pool = await sql.connect(config);
+        let order = await pool.request()
+            .input('trangThai', sql.Int, values.body.trangThai)
+            .input('ngayBatDau', sql.Date, values.body.ngayBatDau)
+            .input('ngayKetThuc', sql.Date, values.body.ngayKetThuc)
+            .execute('sp_LayToanBoDonHangTheoNgay');
+        return order.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+
+
 module.exports = {
     getAllOrder: getAllOrder,
     addOrder: addOrder,
@@ -153,4 +170,5 @@ module.exports = {
     getDetailOrder: getDetailOrder,
     addDetailReturnBill: addDetailReturnBill,
     findOrderWitdId: findOrderWitdId,
+    getAllOrderWithDay: getAllOrderWithDay
 }

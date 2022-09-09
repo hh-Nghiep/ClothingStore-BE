@@ -8,6 +8,19 @@ module.exports = (app) => {
         })
     })
 
+    app.post('/orders/day', (request, response) => {
+        var amount = 10;
+        var page = parseInt(request.query.page);
+        Controller.getAllOrderWithDay(request).then(result => {
+            var data = {
+                totalData: result[0],
+                data: result[0].slice(((page - 1) * amount), (page * amount)),
+                totalPage: Math.ceil(result[0].length / amount)
+            }
+            response.json(data);
+        })
+    })
+
     app.post('/order/add', (request, response) => {
         Controller.addOrder(request).then(result => {
             response.json(result);
@@ -61,7 +74,6 @@ module.exports = (app) => {
             response.json(result);
         })
     })
-
 
     app.post('/order/return', (request, response) => {
         Controller.addDetailReturnBill(request).then(result => {
