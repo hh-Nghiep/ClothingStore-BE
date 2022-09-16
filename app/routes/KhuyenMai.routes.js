@@ -36,4 +36,22 @@ module.exports = (app) => {
             response.json(result.returnValue);
         })
     })
+
+    app.post('/sale/find', (request, response) => {
+        Controller.findSaleWithName(request).then(result => {
+            response.json(result);
+        })
+    })
+
+    app.post('/sale/edit', (request, response) => {
+        Controller.editSale(request).then(result => {
+            response.json(result);
+        })
+    })
+
+    app.get('/sale/find/:id', (request, response) => {
+        Controller.findSaleWithId(request.params.id).then(result => {
+            response.json(result[0][0]);
+        })
+    })
 }
