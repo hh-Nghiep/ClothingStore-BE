@@ -1,8 +1,7 @@
-
 const config = {
-    user: 'sa',
-    password: '123',
-    server: '127.0.0.1',
+    user: 'hoangnghiep',
+    password: 'Aa13092014',
+    server: 'mssql-90219-0.cloudclusters.net',
     database: 'DB_ClothingWebsite',
     options: {
         encrypt: false,
@@ -10,7 +9,7 @@ const config = {
         enableArithAbort: true,
         instancename: 'SQLEXPRESS'
     },
-    port: 1433
+    port: 18231
 }
 
 module.exports = config; 
