@@ -1,15 +1,14 @@
 const config = {
-    user: 'sqlserver',
-    password: '123',
-    server: '35.238.254.158',
+    user: 'hoangnghiep',
+    password: 'Aa13092014',
+    server: 'clothingstore.database.windows.net',
     database: 'DB_ClothingWebsite',
     options: {
-        encrypt: false,
+        encrypt: true,
         trustedconnection: true,
         enableArithAbort: true,
         instancename: 'SQLEXPRESS'
     },
-    port: 1433
 }
 
 module.exports = config;
